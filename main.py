@@ -23,6 +23,7 @@ def create_client() -> SSHClient:
             password=ILO_PASSWORD,
             port=int(ILO_SSH_PORT),
             timeout=TIMEOUT,
+            look_for_keys=False,
             disabled_algorithms=dict(pubkeys=["rsa-sha2-512", "rsa-sha2-256"])
         )
     return client
@@ -42,8 +43,8 @@ def main():
     print("Restarting ILO...   ", end="")
     print(restart_ilo(rest_cl))
 
-    print("Waiting 60 seconds for ILO restarting...")
-    time.sleep(60);
+    print(f"Waiting {JSON_DATA["ilo_restart_delay"]} seconds for ILO restarting...")
+    time.sleep(JSON_DATA["ilo_restart_delay"]);
     cl = create_client()
 
     print("Setting min PID values...")
